@@ -1,33 +1,34 @@
 package com.alex_kind.openweathermvvm
 
-import android.Manifest
+import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import android.location.LocationManager
-import android.location.LocationRequest
 import android.os.Bundle
-import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
+import com.alex_kind.openweathermvvm.Retrofit.MainRepository
+import com.alex_kind.openweathermvvm.Retrofit.RetrofitService
+import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
-import com.google.android.gms.location.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 
-class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity() {
+
+    private val coroutineContext = SupervisorJob() + Dispatchers.Main.immediate
+    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineContext)
 
     lateinit var bind: ActivityMainBinding
 
+    private lateinit var viewModel: MainActivityViewModel
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    private lateinit var locationRequest: com.google.android.gms.location.LocationRequest
-    private val locationCallback = object : LocationCallback() {
-        override fun onLocationResult(locationResult: LocationResult) {
-        }
-    }
+    var lat = ""
+    var lon = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,96 +36,60 @@ class MainActivity : AppCompatActivity() {
         bind = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        val retrofitService = RetrofitService.getRetrofit()
+        val mainRepository = MainRepository(retrofitService)
 
-        getCurrentLocation()
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelFactory(mainRepository, applicationContext as Application, this))
+            .get(MainActivityViewModel::class.java)
+
+
+
+        getLocation()
+
 
         bind.buttonCheck.setOnClickListener {
-            getCurrentLocation()
+            viewModel.getLocationUpdates()
         }
-
-
-    }
-
-    private fun getLocationUpdates() {
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        locationRequest = com.google.android.gms.location.LocationRequest.create()
-        locationRequest.interval = 0
-        locationRequest.fastestInterval = 0
-        locationRequest.numUpdates = 2
-        locationRequest.priority = Priority.PRIORITY_HIGH_ACCURACY
-
-
-        Looper.myLooper()?.let {
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return
-            }
-
-            fusedLocationProviderClient.requestLocationUpdates(
-                locationRequest, locationCallback, it
-            )
-        }
-
     }
 
 
-    private fun getCurrentLocation() {
-        if (checkPermissions()) {
-
-            if (isLocationEnabled()) {
-
-                if (ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    requestPermission()
-                    return
-                }
-
-                fusedLocationProviderClient.lastLocation.addOnCompleteListener(this) {
-                    val location: Location? = it.result
-
-                    if (location == null) {
-                        Toast.makeText(this, "Null received", Toast.LENGTH_SHORT).show()
-                        getLocationUpdates()
-
-                    } else {
-                        Toast.makeText(this, "get success", Toast.LENGTH_SHORT).show()
-
-                        if (bind.locationTxt.text == "") {
-                            getCurrentLocation()
-                        }
-
-                        bind.locationTxt.text =
-                            "lat: " + location.latitude + "\nlon: " + location.longitude
-                    }
-                }
-
-            } else {
-
-                Toast.makeText(this, "Turn on location", Toast.LENGTH_SHORT).show()
-                val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(intent)
 
 
-            }
+
+    private fun setParams() {
+            bind.locationTxt.text = "lat: $lat\nlon: $lon"
+        viewModel.cityName.observe(this){
+            bind.test.text = it[0].name
+        }
+    }
+
+
+    private fun getLocation() {
+        if (isLocationEnabled()) {
+            viewModel.getCurrentLocation()
+
+            viewModel.lat.observe(this, {
+                lat = it
+            })
+
+            viewModel.lon.observe(this, {
+                lon = it
+                setParams()
+            })
+
         } else {
-
-            requestPermission()
+            Toast.makeText(this, "Turn on location", Toast.LENGTH_SHORT).show()
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
         }
-
     }
+
+
+
+
+
 
 
     private fun isLocationEnabled(): Boolean {
@@ -135,40 +100,6 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-    }
-
-    private fun requestPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ),
-            PERMISSION_REQUEST_ACCESS_LOCATION
-        )
-    }
-
-    companion object {
-        private const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
-    }
-
-
-    private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-            &&
-            ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            )
-            == PackageManager.PERMISSION_GRANTED
-        ) {
-            return true
-        }
-        return false
     }
 
 
@@ -182,14 +113,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == PERMISSION_REQUEST_ACCESS_LOCATION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(applicationContext, "Granted", Toast.LENGTH_SHORT).show()
-                getCurrentLocation()
+                getLocation()
             }
         } else {
             Toast.makeText(applicationContext, "Denied", Toast.LENGTH_SHORT).show()
         }
-
-
     }
-
-
 }
