@@ -1,5 +1,6 @@
 package com.alex_kind.openweathermvvm
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -7,21 +8,18 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.alex_kind.openweathermvvm.Retrofit.MainRepository
-import com.alex_kind.openweathermvvm.Retrofit.RetrofitService
+import com.alex_kind.openweathermvvm.retrofit.MainRepository
+import com.alex_kind.openweathermvvm.retrofit.RetrofitService
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
+import com.alex_kind.openweathermvvm.const.TAG
 import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 
 open class MainActivity : AppCompatActivity() {
-
-    private val coroutineContext = SupervisorJob() + Dispatchers.Main.immediate
-    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineContext)
 
     lateinit var bind: ActivityMainBinding
 
@@ -41,67 +39,62 @@ open class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(mainRepository, applicationContext as Application, this))
-            .get(MainActivityViewModel::class.java)
+            ViewModelFactory(mainRepository, applicationContext as Application, this))[MainActivityViewModel::class.java]
 
 
-
-        getLocation()
-
+        setParams()
 
         bind.buttonCheck.setOnClickListener {
             viewModel.getLocationUpdates()
+            setParams()
         }
     }
 
 
 
-
-
+    @SuppressLint("SetTextI18n")
     private fun setParams() {
-            bind.locationTxt.text = "lat: $lat\nlon: $lon"
         viewModel.cityName.observe(this){
             bind.test.text = it[0].name
         }
+
+
+        viewModel.lat.observe(this, {
+            lat = it
+        })
+
+
+        viewModel.lon.observe(this, {
+            lon = it
+            bind.locationTxt.text = "lat: $lat\nlon: $lon"
+            loading()
+        })
     }
 
 
-    private fun getLocation() {
-        if (isLocationEnabled()) {
-            viewModel.getCurrentLocation()
+    private fun loading(){
+        viewModel.loading.observe(this ,{
+            if (it){
+                bind.progressBar.visibility = View.VISIBLE
+            } else{
+                bind.progressBar.visibility = View.GONE
+            }
+        })
 
-            viewModel.lat.observe(this, {
-                lat = it
-            })
+    }
 
-            viewModel.lon.observe(this, {
-                lon = it
-                setParams()
-            })
 
-        } else {
-            Toast.makeText(this, "Turn on location", Toast.LENGTH_SHORT).show()
-            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-            startActivity(intent)
+
+
+
+
+    override fun onResume() {
+        super.onResume()
+        if (bind.progressBar.visibility == View.VISIBLE) {
+            viewModel.getLocationUpdates()
+            setParams()
         }
     }
-
-
-
-
-
-
-
-    private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager =
-            getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
-            LocationManager.NETWORK_PROVIDER
-        )
-
-
-    }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -113,7 +106,6 @@ open class MainActivity : AppCompatActivity() {
         if (requestCode == PERMISSION_REQUEST_ACCESS_LOCATION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(applicationContext, "Granted", Toast.LENGTH_SHORT).show()
-                getLocation()
             }
         } else {
             Toast.makeText(applicationContext, "Denied", Toast.LENGTH_SHORT).show()

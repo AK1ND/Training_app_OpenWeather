@@ -1,4 +1,4 @@
-package com.alex_kind.openweathermvvm.Retrofit
+package com.alex_kind.openweathermvvm.retrofit
 
 class MainRepository (
     private val retrofitService: RetrofitService,

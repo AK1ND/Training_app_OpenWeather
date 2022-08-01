@@ -1,4 +1,4 @@
-package com.alex_kind.openweathermvvm.Retrofit
+package com.alex_kind.openweathermvvm.retrofit
 
 import com.alex_kind.openweathermvvm.const.BASE_URL
 import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
