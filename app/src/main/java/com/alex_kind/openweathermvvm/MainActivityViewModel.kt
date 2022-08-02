@@ -1,6 +1,7 @@
 package com.alex_kind.openweathermvvm
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Application
 import android.content.Context
@@ -11,10 +12,8 @@ import android.location.LocationManager
 import android.os.Looper
 import android.provider.Settings
 import android.util.Log
-import android.webkit.PermissionRequest
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -26,6 +25,7 @@ import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.google.android.gms.location.*
 import kotlinx.coroutines.*
 
+@SuppressLint("StaticFieldLeak")
 class MainActivityViewModel(
     private val mainRepository: MainRepository,
     application: Application,
@@ -89,7 +89,6 @@ class MainActivityViewModel(
     }
 
 
-
     fun getLocationUpdates() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
         locationRequest = LocationRequest.create()
@@ -118,10 +117,9 @@ class MainActivityViewModel(
     }
 
 
-
     private fun getCurrentLocation() {
         if (checkPermissions()) {
-            if (isLocationEnabled()){
+            if (isLocationEnabled()) {
 
                 if (ActivityCompat.checkSelfPermission(
                         context,
@@ -131,29 +129,28 @@ class MainActivityViewModel(
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
-                    requestPermission()
                     return
                 }
 
-            fusedLocationProviderClient.lastLocation.addOnCompleteListener {
-                val location: Location? = it.result
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener {
+                    val location: Location? = it.result
 
-                if (location == null) {
-                    Toast.makeText(context, "Null received", Toast.LENGTH_SHORT).show()
-                    getLocationUpdates()
-                } else {
-                    Toast.makeText(context, "get success", Toast.LENGTH_SHORT).show()
+                    if (location == null) {
+                        Toast.makeText(context, "Null received", Toast.LENGTH_SHORT).show()
+                        getLocationUpdates()
+                    } else {
+                        Toast.makeText(context, "get success", Toast.LENGTH_SHORT).show()
 
-                    _lat.value = location.latitude.toString()
-                    _lon.value = location.longitude.toString()
-                    getCityName()
-                    Log.d(TAG, "VIEWMODELRESTARTED")
+                        _lat.value = location.latitude.toString()
+                        _lon.value = location.longitude.toString()
+                        getCityName()
+                        Log.d(TAG, "VIEWMODELRESTARTED")
+                    }
                 }
-            }
-        } else {
+            } else {
                 Toast.makeText(context, "Turn on location", Toast.LENGTH_SHORT).show()
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-                startActivity(context ,intent, null)
+                startActivity(context, intent, null)
             }
         } else {
 
@@ -161,10 +158,6 @@ class MainActivityViewModel(
         }
 
     }
-
-
-
-
 
 
     private fun isLocationEnabled(): Boolean {
@@ -176,7 +169,6 @@ class MainActivityViewModel(
 
 
     }
-
 
 
     //PERMISSIONS

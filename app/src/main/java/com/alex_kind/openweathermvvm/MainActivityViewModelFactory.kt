@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory(
+class MainActivityViewModelFactory(
     private val repository: MainRepository,
     private val application: Application,
     private val activity: Activity

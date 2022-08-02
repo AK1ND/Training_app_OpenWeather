@@ -2,22 +2,16 @@ package com.alex_kind.openweathermvvm
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Bundle
-import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
+import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.alex_kind.openweathermvvm.retrofit.RetrofitService
-import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
-import com.alex_kind.openweathermvvm.const.TAG
-import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
-import kotlinx.coroutines.*
 
 open class MainActivity : AppCompatActivity() {
 
@@ -39,7 +33,8 @@ open class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this,
-            ViewModelFactory(mainRepository, applicationContext as Application, this))[MainActivityViewModel::class.java]
+            MainActivityViewModelFactory(mainRepository, applicationContext as Application, this)
+        )[MainActivityViewModel::class.java]
 
 
         setParams()
@@ -51,10 +46,9 @@ open class MainActivity : AppCompatActivity() {
     }
 
 
-
     @SuppressLint("SetTextI18n")
     private fun setParams() {
-        viewModel.cityName.observe(this){
+        viewModel.cityName.observe(this) {
             bind.test.text = it[0].name
         }
 
@@ -72,20 +66,16 @@ open class MainActivity : AppCompatActivity() {
     }
 
 
-    private fun loading(){
-        viewModel.loading.observe(this ,{
-            if (it){
+    private fun loading() {
+        viewModel.loading.observe(this, {
+            if (it) {
                 bind.progressBar.visibility = View.VISIBLE
-            } else{
+            } else {
                 bind.progressBar.visibility = View.GONE
             }
         })
 
     }
-
-
-
-
 
 
     override fun onResume() {

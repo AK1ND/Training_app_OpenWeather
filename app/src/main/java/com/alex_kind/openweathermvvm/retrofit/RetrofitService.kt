@@ -13,8 +13,8 @@ interface RetrofitService {
 
     @GET("data/2.5/forecast?appid=6e298e72d16587b721abb30bbf7c721a")
     suspend fun getWeather(
-        @Query ("q") q: String
-    ) : Response<MainModelWeather>
+        @Query("q") q: String
+    ): Response<MainModelWeather>
 
 
     @GET("geo/1.0/reverse?appid=6e298e72d16587b721abb30bbf7c721a&limit=5")
@@ -22,9 +22,6 @@ interface RetrofitService {
         @Query("lat") lat: String?,
         @Query("lon") lon: String?
     ): Response<List<MainModelGeo>>
-
-
-
 
 
     companion object {
