@@ -28,9 +28,8 @@ import kotlinx.coroutines.*
 @SuppressLint("StaticFieldLeak")
 class MainActivityViewModel(
     private val mainRepository: MainRepository,
-    application: Application,
-    private val activity: Activity
-    //why it's wrong?
+    application: Application,      //TODO need remove application ->
+    private val activity: Activity // and activity
 ) : AndroidViewModel(application) {
 
     private val context = application
@@ -129,6 +128,7 @@ class MainActivityViewModel(
                         Manifest.permission.ACCESS_COARSE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
+                    requestPermission()
                     return
                 }
 
@@ -144,7 +144,7 @@ class MainActivityViewModel(
                         _lat.value = location.latitude.toString()
                         _lon.value = location.longitude.toString()
                         getCityName()
-                        Log.d(TAG, "VIEWMODELRESTARTED")
+                        Log.d(TAG, "VIEW MODEL RESTARTED")
                     }
                 }
             } else {

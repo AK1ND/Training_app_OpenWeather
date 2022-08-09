@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
+import com.alex_kind.openweathermvvm.fragments.CurrentWeatherFragment
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.alex_kind.openweathermvvm.retrofit.RetrofitService
 
@@ -63,6 +64,8 @@ open class MainActivity : AppCompatActivity() {
             bind.locationTxt.text = "lat: $lat\nlon: $lon"
             loading()
         })
+
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CurrentWeatherFragment()).commit()
     }
 
 
