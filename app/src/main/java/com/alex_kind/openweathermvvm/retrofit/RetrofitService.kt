@@ -1,8 +1,10 @@
 package com.alex_kind.openweathermvvm.retrofit
 
+import com.alex_kind.openweathermvvm.const.APP_ID
 import com.alex_kind.openweathermvvm.const.BASE_URL
+import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
 import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
-import com.alex_kind.openweathermvvm.models.weather.MainModelWeather
+import com.alex_kind.openweathermvvm.models.forecast.MainModelWeather
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -11,17 +13,29 @@ import retrofit2.http.Query
 
 interface RetrofitService {
 
-    @GET("data/2.5/forecast?appid=6e298e72d16587b721abb30bbf7c721a")
-    suspend fun getWeather(
-        @Query("q") q: String
-    ): Response<MainModelWeather>
 
-
-    @GET("geo/1.0/reverse?appid=6e298e72d16587b721abb30bbf7c721a&limit=5")
+    @GET("geo/1.0/reverse")
     suspend fun getCityName(
         @Query("lat") lat: String?,
-        @Query("lon") lon: String?
+        @Query("lon") lon: String?,
+        @Query("appid") app_id: String = APP_ID
     ): Response<List<MainModelGeo>>
+
+
+    @GET("data/2.5/forecast")
+    suspend fun getForecast(
+        @Query("lat") lat: String?,
+        @Query("lon") lon: String?,
+        @Query("appid")app_id: String = APP_ID
+    ): Response<MainModelWeather>
+
+//    https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
+    @GET ("data/2.5/weather")
+    suspend fun getCurrentWeather(
+    @Query("lat")lat: String?,
+    @Query("lon") lon: String?,
+    @Query("appid") app_id: String = APP_ID
+    ): Response<MainModelCurrentWeather>
 
 
     companion object {

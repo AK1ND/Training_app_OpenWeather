@@ -6,11 +6,13 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
-import com.alex_kind.openweathermvvm.fragments.CurrentWeatherFragment
+import com.alex_kind.openweathermvvm.fragments.current_weather_fragment.CurrentWeatherFragment
+import com.alex_kind.openweathermvvm.fragments.current_weather_fragment.CurrentWeatherFragmentViewModel
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.alex_kind.openweathermvvm.retrofit.RetrofitService
 
@@ -19,6 +21,7 @@ open class MainActivity : AppCompatActivity() {
     lateinit var bind: ActivityMainBinding
 
     private lateinit var viewModel: MainActivityViewModel
+    private val currentWeatherFragmentViewModel: CurrentWeatherFragmentViewModel by viewModels()
 
     var lat = ""
     var lon = ""
@@ -43,29 +46,30 @@ open class MainActivity : AppCompatActivity() {
         bind.buttonCheck.setOnClickListener {
             viewModel.getLocationUpdates()
             setParams()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CurrentWeatherFragment()).commit()
+
         }
     }
 
 
     @SuppressLint("SetTextI18n")
     private fun setParams() {
-        viewModel.cityName.observe(this) {
-            bind.test.text = it[0].name
+        viewModel.currentWeatherData.observe(this) {
+            bind.test.text = it.name
+            currentWeatherFragmentViewModel.setData(it)
         }
 
 
-        viewModel.lat.observe(this, {
+        viewModel.latFromGPS.observe(this, {
             lat = it
         })
 
 
-        viewModel.lon.observe(this, {
+        viewModel.lonFromGPS.observe(this, {
             lon = it
             bind.locationTxt.text = "lat: $lat\nlon: $lon"
             loading()
         })
-
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CurrentWeatherFragment()).commit()
     }
 
 

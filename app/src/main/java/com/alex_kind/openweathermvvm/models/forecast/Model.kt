@@ -1,4 +1,4 @@
-package com.alex_kind.openweathermvvm.models.weather
+package com.alex_kind.openweathermvvm.models.forecast
 
 data class Model(
     val clouds: Clouds,

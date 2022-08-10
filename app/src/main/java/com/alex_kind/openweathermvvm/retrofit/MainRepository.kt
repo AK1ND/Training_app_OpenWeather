@@ -6,5 +6,7 @@ class MainRepository(
 
     suspend fun getCityName(lat: String?, lon: String?) = retrofitService.getCityName(lat, lon)
 
-    suspend fun getWeather(cityName: String) = retrofitService.getWeather(cityName)
+    suspend fun getForecast(lat: String?, lon: String?) = retrofitService.getForecast(lat, lon)
+
+    suspend fun getCurrentWeather(lat: String?, lon: String?) = retrofitService.getCurrentWeather(lat, lon)
 }

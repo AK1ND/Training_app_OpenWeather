@@ -11,12 +11,14 @@ class MainActivityViewModelFactory(
     private val repository: MainRepository,
     private val application: Application,
     private val activity: Activity
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+) : ViewModelProvider.Factory{
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {
             MainActivityViewModel(repository, application, activity) as T
         } else {
             throw IllegalArgumentException("ViewModel not found")
         }
     }
+
 }

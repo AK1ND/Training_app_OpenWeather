@@ -20,6 +20,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.const.TAG
+import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
+import com.alex_kind.openweathermvvm.models.forecast.MainModelWeather
 import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.google.android.gms.location.*
@@ -52,15 +54,26 @@ class MainActivityViewModel(
 
 
     //START OTHER VARIABLES
-    private val _lat = MutableLiveData<String>()
-    val lat: LiveData<String> get() = _lat
+    private val _latFromGPS = MutableLiveData<String>()
+    val latFromGPS: LiveData<String> get() = _latFromGPS
 
-    private val _lon = MutableLiveData<String>()
-    val lon: LiveData<String> get() = _lon
+    private val _lonFromGPS = MutableLiveData<String>()
+    val lonFromGPS: LiveData<String> get() = _lonFromGPS
 
-    private val _cityName = MutableLiveData<List<MainModelGeo>>()
-    val cityName: LiveData<List<MainModelGeo>> get() = _cityName
+    private val _cityData = MutableLiveData<List<MainModelGeo>>()
+    val cityData: LiveData<List<MainModelGeo>> get() = _cityData
 
+    private val _latFromResponse = MutableLiveData<String>()
+    val latFromResponse: LiveData<String> get() = _latFromResponse
+
+    private val _lonFromResponse = MutableLiveData<String>()
+    val lonFromResponse: LiveData<String> get() = _lonFromResponse
+
+    private val _forecastData = MutableLiveData<MainModelWeather>()
+    val forecastData: LiveData<MainModelWeather> get() = _forecastData
+
+    private val _currentWeatherData = MutableLiveData<MainModelCurrentWeather>()
+    val currentWeatherData: LiveData<MainModelCurrentWeather> get() = _currentWeatherData
 
     val loading = MutableLiveData<Boolean>()
     //END OTHER VARIABLES
@@ -74,15 +87,41 @@ class MainActivityViewModel(
     private fun getCityName() {
         coroutineScope.launch {
             loading.postValue(true)
-            val response = mainRepository.getCityName(_lat.value, _lon.value)
+            val response = mainRepository.getCityName(_latFromGPS.value, _lonFromGPS.value)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    _cityName.postValue(response.body())
+                    _cityData.postValue(response.body())
+                    val body = response.body()!!
+                    _latFromResponse.value = body[0].lat.toString()
+                    _lonFromResponse.value = body[0].lon.toString()
                     loading.value = false
+                    getCurrentWeather()
                 } else {
                     loading.value = false
                 }
 
+            }
+        }
+    }
+
+    private fun getCurrentWeather() {
+        coroutineScope.launch {
+            val response = mainRepository.getCurrentWeather(_latFromResponse.value, _lonFromResponse.value)
+            withContext(Dispatchers.Main){
+                if (response.isSuccessful){
+                    _currentWeatherData.postValue(response.body())
+                }
+            }
+        }
+    }
+
+    private fun getForecast() {
+        coroutineScope.launch {
+            val response = mainRepository.getForecast(_latFromResponse.value, _lonFromResponse.value)
+            withContext(Dispatchers.Main){
+                if (response.isSuccessful){
+                    _forecastData.postValue(response.body())
+                }
             }
         }
     }
@@ -141,8 +180,8 @@ class MainActivityViewModel(
                     } else {
                         Toast.makeText(context, "get success", Toast.LENGTH_SHORT).show()
 
-                        _lat.value = location.latitude.toString()
-                        _lon.value = location.longitude.toString()
+                        _latFromGPS.value = location.latitude.toString()
+                        _lonFromGPS.value = location.longitude.toString()
                         getCityName()
                         Log.d(TAG, "VIEW MODEL RESTARTED")
                     }
