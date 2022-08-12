@@ -23,9 +23,6 @@ open class MainActivity : AppCompatActivity() {
     private lateinit var viewModel: MainActivityViewModel
     private val currentWeatherFragmentViewModel: CurrentWeatherFragmentViewModel by viewModels()
 
-    var lat = ""
-    var lon = ""
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,44 +40,33 @@ open class MainActivity : AppCompatActivity() {
 
         setParams()
 
-        bind.buttonCheck.setOnClickListener {
-            viewModel.getLocationUpdates()
-            setParams()
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CurrentWeatherFragment()).commit()
-
-        }
+//        bind.buttonCheck.setOnClickListener {
+//            viewModel.getLocationUpdates()
+//            setParams()
+//            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CurrentWeatherFragment()).commit()
+//
+//        }
     }
 
 
     @SuppressLint("SetTextI18n")
     private fun setParams() {
         viewModel.currentWeatherData.observe(this) {
-            bind.test.text = it.name
             currentWeatherFragmentViewModel.setData(it)
-        }
-
-
-        viewModel.latFromGPS.observe(this, {
-            lat = it
-        })
-
-
-        viewModel.lonFromGPS.observe(this, {
-            lon = it
-            bind.locationTxt.text = "lat: $lat\nlon: $lon"
             loading()
-        })
+        }
     }
 
 
     private fun loading() {
-        viewModel.loading.observe(this, {
+        viewModel.loading.observe(this) {
             if (it) {
                 bind.progressBar.visibility = View.VISIBLE
             } else {
                 bind.progressBar.visibility = View.GONE
+                supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CurrentWeatherFragment()).commit()
             }
-        })
+        }
 
     }
 

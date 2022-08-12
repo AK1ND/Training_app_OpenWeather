@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_size_current_portrait">20sp</dimen>
+    <dimen name="text_size_current_landscape">14sp</dimen>
+    <dimen name="image_size_current_landscape">14dp</dimen>
+</resources>

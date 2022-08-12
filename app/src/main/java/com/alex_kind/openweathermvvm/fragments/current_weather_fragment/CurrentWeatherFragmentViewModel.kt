@@ -7,11 +7,11 @@ import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeat
 
 class CurrentWeatherFragmentViewModel: ViewModel() {
 
-    private val _cityData = MutableLiveData<MainModelCurrentWeather>()
-    val cityData: LiveData<MainModelCurrentWeather> get() = _cityData
+    private val _currentWeatherData = MutableLiveData<MainModelCurrentWeather>()
+    val currentWeatherData: LiveData<MainModelCurrentWeather> get() = _currentWeatherData
 
 
     fun setData(data: MainModelCurrentWeather){
-        _cityData.value = data
+        _currentWeatherData.value = data
     }
 }

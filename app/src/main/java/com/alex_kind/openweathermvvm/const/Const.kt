@@ -19,3 +19,5 @@ const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
 const val TAG = "HAHAHAHA"
 
 const val APP_ID = "6e298e72d16587b721abb30bbf7c721a"
+
+const val UNITS_METRIC = "metric"

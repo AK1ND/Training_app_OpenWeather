@@ -3,4 +3,11 @@
     <string name="check">Check</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_weather">CURRENT WEATHER</string>
+    <string name="humidity">HUMIDITY</string>
+    <string name="wind">WIND</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="temp">TEMP</string>
+    <string name="city_name">CITY_NAME</string>
+
 </resources>

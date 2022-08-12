@@ -2,6 +2,7 @@ package com.alex_kind.openweathermvvm.retrofit
 
 import com.alex_kind.openweathermvvm.const.APP_ID
 import com.alex_kind.openweathermvvm.const.BASE_URL
+import com.alex_kind.openweathermvvm.const.UNITS_METRIC
 import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
 import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
 import com.alex_kind.openweathermvvm.models.forecast.MainModelWeather
@@ -26,6 +27,7 @@ interface RetrofitService {
     suspend fun getForecast(
         @Query("lat") lat: String?,
         @Query("lon") lon: String?,
+        @Query("units") units: String? = UNITS_METRIC,
         @Query("appid")app_id: String = APP_ID
     ): Response<MainModelWeather>
 
@@ -34,6 +36,7 @@ interface RetrofitService {
     suspend fun getCurrentWeather(
     @Query("lat")lat: String?,
     @Query("lon") lon: String?,
+    @Query("units") units: String? = UNITS_METRIC,
     @Query("appid") app_id: String = APP_ID
     ): Response<MainModelCurrentWeather>
 
