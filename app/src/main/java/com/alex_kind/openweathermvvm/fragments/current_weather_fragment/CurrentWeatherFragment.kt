@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.alex_kind.openweathermvvm.databinding.FragmentCurrentWeatherBinding
+import com.alex_kind.openweathermvvm.fragments.FragmentsViewModel
 import com.bumptech.glide.Glide
-import kotlin.math.nextUp
 
 
 class CurrentWeatherFragment : Fragment() {
@@ -17,7 +17,7 @@ class CurrentWeatherFragment : Fragment() {
     private lateinit var _bind: FragmentCurrentWeatherBinding
     private val bind get() = _bind
 
-    private val fragmentViewModel: CurrentWeatherFragmentViewModel by activityViewModels()
+    private val fragmentViewModel: FragmentsViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

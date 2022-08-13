@@ -6,7 +6,9 @@
         <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/activity_main.xml" value="0.21965579710144928" />
         <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/blank_fragment.xml" value="0.16388044579533942" />
         <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/current_weather_fragment.xml" value="0.1707193515704154" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_current_weather.xml" value="0.1707193515704154" />
+        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_current_weather.xml" value="0.2" />
+        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_forecast.xml" value="0.17760416666666667" />
+        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_scrolling.xml" value="0.19972826086956522" />
         <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/main_fragment.xml" value="0.1707193515704154" />
         <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/navigation_fragment_current_weather_fragment.xml" value="0.19972826086956522" />
       </map>

@@ -1,6 +1,5 @@
 package com.alex_kind.openweathermvvm
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -12,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
 import com.alex_kind.openweathermvvm.fragments.current_weather_fragment.CurrentWeatherFragment
-import com.alex_kind.openweathermvvm.fragments.current_weather_fragment.CurrentWeatherFragmentViewModel
+import com.alex_kind.openweathermvvm.fragments.FragmentsViewModel
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.alex_kind.openweathermvvm.retrofit.RetrofitService
 
@@ -21,7 +20,7 @@ open class MainActivity : AppCompatActivity() {
     lateinit var bind: ActivityMainBinding
 
     private lateinit var viewModel: MainActivityViewModel
-    private val currentWeatherFragmentViewModel: CurrentWeatherFragmentViewModel by viewModels()
+    private val fragmentsViewModel: FragmentsViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,6 +39,8 @@ open class MainActivity : AppCompatActivity() {
 
         setParams()
 
+
+
 //        bind.buttonCheck.setOnClickListener {
 //            viewModel.getLocationUpdates()
 //            setParams()
@@ -49,10 +50,13 @@ open class MainActivity : AppCompatActivity() {
     }
 
 
-    @SuppressLint("SetTextI18n")
     private fun setParams() {
         viewModel.currentWeatherData.observe(this) {
-            currentWeatherFragmentViewModel.setData(it)
+            fragmentsViewModel.setDataCurrentWeather(it)
+        }
+
+        viewModel.forecastData.observe(this) {
+            fragmentsViewModel.setDataForecast(it)
             loading()
         }
     }

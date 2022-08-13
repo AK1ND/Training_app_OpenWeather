@@ -1,6 +1,6 @@
 package com.alex_kind.openweathermvvm.models.forecast
 
-data class MainModelWeather(
+data class MainModelForecast(
     val city: City,
     val cnt: Int,
     val cod: String,

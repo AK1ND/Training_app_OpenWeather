@@ -21,7 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.const.TAG
 import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
-import com.alex_kind.openweathermvvm.models.forecast.MainModelWeather
+import com.alex_kind.openweathermvvm.models.forecast.MainModelForecast
 import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.google.android.gms.location.*
@@ -69,8 +69,8 @@ class MainActivityViewModel(
     private val _lonFromResponse = MutableLiveData<String>()
     val lonFromResponse: LiveData<String> get() = _lonFromResponse
 
-    private val _forecastData = MutableLiveData<MainModelWeather>()
-    val forecastData: LiveData<MainModelWeather> get() = _forecastData
+    private val _forecastData = MutableLiveData<MainModelForecast>()
+    val forecastData: LiveData<MainModelForecast> get() = _forecastData
 
     private val _currentWeatherData = MutableLiveData<MainModelCurrentWeather>()
     val currentWeatherData: LiveData<MainModelCurrentWeather> get() = _currentWeatherData
@@ -96,6 +96,7 @@ class MainActivityViewModel(
                     _lonFromResponse.value = body[0].lon.toString()
                     loading.value = false
                     getCurrentWeather()
+                    getForecast()
                 } else {
                     loading.value = false
                 }
