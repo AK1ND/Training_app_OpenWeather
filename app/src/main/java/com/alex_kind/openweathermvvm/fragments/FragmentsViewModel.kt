@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
 import com.alex_kind.openweathermvvm.models.forecast.MainModelForecast
 
-class FragmentsViewModel: ViewModel() {
+class FragmentsViewModel : ViewModel() {
 
     private val _currentWeatherData = MutableLiveData<MainModelCurrentWeather>()
     val currentWeatherData: LiveData<MainModelCurrentWeather> get() = _currentWeatherData
@@ -15,11 +15,11 @@ class FragmentsViewModel: ViewModel() {
     val forecastWeatherData: LiveData<MainModelForecast> get() = _forecastWeatherData
 
 
-    fun setDataCurrentWeather(data: MainModelCurrentWeather){
+    fun setDataCurrentWeather(data: MainModelCurrentWeather) {
         _currentWeatherData.value = data
     }
 
-    fun setDataForecast(data: MainModelForecast){
+    fun setDataForecast(data: MainModelForecast) {
         _forecastWeatherData.value = data
     }
 

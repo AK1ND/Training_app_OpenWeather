@@ -8,5 +8,6 @@ class MainRepository(
 
     suspend fun getForecast(lat: String?, lon: String?) = retrofitService.getForecast(lat, lon)
 
-    suspend fun getCurrentWeather(lat: String?, lon: String?) = retrofitService.getCurrentWeather(lat, lon)
+    suspend fun getCurrentWeather(lat: String?, lon: String?) =
+        retrofitService.getCurrentWeather(lat, lon)
 }

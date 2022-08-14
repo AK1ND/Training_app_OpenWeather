@@ -107,9 +107,10 @@ class MainActivityViewModel(
 
     private fun getCurrentWeather() {
         coroutineScope.launch {
-            val response = mainRepository.getCurrentWeather(_latFromResponse.value, _lonFromResponse.value)
-            withContext(Dispatchers.Main){
-                if (response.isSuccessful){
+            val response =
+                mainRepository.getCurrentWeather(_latFromResponse.value, _lonFromResponse.value)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
                     _currentWeatherData.postValue(response.body())
                 }
             }
@@ -118,9 +119,10 @@ class MainActivityViewModel(
 
     private fun getForecast() {
         coroutineScope.launch {
-            val response = mainRepository.getForecast(_latFromResponse.value, _lonFromResponse.value)
-            withContext(Dispatchers.Main){
-                if (response.isSuccessful){
+            val response =
+                mainRepository.getForecast(_latFromResponse.value, _lonFromResponse.value)
+            withContext(Dispatchers.Main) {
+                if (response.isSuccessful) {
                     _forecastData.postValue(response.body())
                 }
             }

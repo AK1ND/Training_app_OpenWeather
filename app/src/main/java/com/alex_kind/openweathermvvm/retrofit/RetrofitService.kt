@@ -4,8 +4,8 @@ import com.alex_kind.openweathermvvm.const.APP_ID
 import com.alex_kind.openweathermvvm.const.BASE_URL
 import com.alex_kind.openweathermvvm.const.UNITS_METRIC
 import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
-import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
 import com.alex_kind.openweathermvvm.models.forecast.MainModelForecast
+import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,16 +28,16 @@ interface RetrofitService {
         @Query("lat") lat: String?,
         @Query("lon") lon: String?,
         @Query("units") units: String? = UNITS_METRIC,
-        @Query("appid")app_id: String = APP_ID
+        @Query("appid") app_id: String = APP_ID
     ): Response<MainModelForecast>
 
-//    https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
-    @GET ("data/2.5/weather")
+    //    https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API key}
+    @GET("data/2.5/weather")
     suspend fun getCurrentWeather(
-    @Query("lat")lat: String?,
-    @Query("lon") lon: String?,
-    @Query("units") units: String? = UNITS_METRIC,
-    @Query("appid") app_id: String = APP_ID
+        @Query("lat") lat: String?,
+        @Query("lon") lon: String?,
+        @Query("units") units: String? = UNITS_METRIC,
+        @Query("appid") app_id: String = APP_ID
     ): Response<MainModelCurrentWeather>
 
 

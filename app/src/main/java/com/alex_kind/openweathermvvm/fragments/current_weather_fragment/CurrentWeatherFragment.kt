@@ -2,10 +2,10 @@ package com.alex_kind.openweathermvvm.fragments.current_weather_fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.alex_kind.openweathermvvm.databinding.FragmentCurrentWeatherBinding
 import com.alex_kind.openweathermvvm.fragments.FragmentsViewModel

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.current_weather_fragment.CurrentWeatherFragment">
 
 
@@ -11,38 +11,25 @@
         android:id="@+id/tv_city_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/city_name"
-        android:textSize="20sp"
         android:textColor="#435CDA"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
-
-
-    <TextView
-        android:id="@+id/tv_current_weather"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/current_weather"
-        android:textColor="@color/color_current_weather_tv"
         android:textSize="20sp"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="@+id/tv_city_name"
-        app:layout_constraintStart_toStartOf="@+id/tv_city_name"
-        app:layout_constraintTop_toBottomOf="@+id/tv_city_name"
-        android:layout_marginTop="12dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <ImageView
         android:id="@+id/icon_weather_current"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@id/tv_current_weather"
-        app:layout_constraintStart_toStartOf="@id/tv_current_weather"
-        app:layout_constraintTop_toBottomOf="@id/tv_current_weather"
-        tools:src="@tools:sample/avatars"
-        android:contentDescription="@null" />
+        android:layout_marginTop="12dp"
+        android:contentDescription="@null"
+        app:layout_constraintEnd_toEndOf="@+id/tv_city_name"
+        app:layout_constraintStart_toStartOf="@+id/tv_city_name"
+        app:layout_constraintTop_toBottomOf="@+id/tv_city_name"
+        tools:src="@tools:sample/avatars" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/temp_description_toolbar"
@@ -121,10 +108,10 @@
             android:layout_height="28dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/wind"
+            android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="@id/wind_toolbar"
             app:layout_constraintEnd_toStartOf="@id/string_separate_wind_and_imageView"
-            app:layout_constraintTop_toTopOf="@id/wind_toolbar"
-            android:contentDescription="@null" />
+            app:layout_constraintTop_toTopOf="@id/wind_toolbar" />
 
         <TextView
             android:id="@+id/tv_wind"
@@ -169,10 +156,10 @@
             android:layout_height="28dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/humidity"
+            android:contentDescription="@null"
             app:layout_constraintBottom_toBottomOf="@id/humidity_toolbar"
             app:layout_constraintEnd_toStartOf="@id/string_separate_humidity_and_imageView"
-            app:layout_constraintTop_toTopOf="@id/humidity_toolbar"
-            android:contentDescription="@null" />
+            app:layout_constraintTop_toTopOf="@id/humidity_toolbar" />
 
         <TextView
             android:id="@+id/tv_humidity"
@@ -187,7 +174,6 @@
             app:layout_constraintTop_toTopOf="@id/humidity_toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

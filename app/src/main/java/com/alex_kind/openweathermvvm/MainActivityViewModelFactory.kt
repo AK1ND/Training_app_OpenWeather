@@ -11,7 +11,7 @@ class MainActivityViewModelFactory(
     private val repository: MainRepository,
     private val application: Application,
     private val activity: Activity
-) : ViewModelProvider.Factory{
+) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return if (modelClass.isAssignableFrom(MainActivityViewModel::class.java)) {

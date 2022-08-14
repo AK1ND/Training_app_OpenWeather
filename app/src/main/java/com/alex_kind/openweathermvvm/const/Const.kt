@@ -12,7 +12,7 @@ https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={API k
 
 */
 
-const val BASE_URL = "http://api.openweathermap.org/"
+const val BASE_URL = "https://api.openweathermap.org/"
 
 const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
 
