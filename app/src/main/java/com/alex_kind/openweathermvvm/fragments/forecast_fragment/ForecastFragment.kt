@@ -11,8 +11,8 @@ import com.alex_kind.openweathermvvm.fragments.FragmentsViewModel
 
 class ForecastFragment : Fragment() {
 
-    private lateinit var _bind: FragmentForecastBinding
-    private val bind get() = _bind
+    private var _bind: FragmentForecastBinding? = null
+    private val bind get() = _bind!!
 
     private var adapter = ForecastAdapter(this)
 
@@ -36,6 +36,12 @@ class ForecastFragment : Fragment() {
             adapter.setForecast(it.list)
         }
 
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _bind = null
     }
 
 }

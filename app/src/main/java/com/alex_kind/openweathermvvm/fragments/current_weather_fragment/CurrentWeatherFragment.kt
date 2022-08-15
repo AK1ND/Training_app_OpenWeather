@@ -14,8 +14,8 @@ import com.bumptech.glide.Glide
 
 class CurrentWeatherFragment : Fragment() {
 
-    private lateinit var _bind: FragmentCurrentWeatherBinding
-    private val bind get() = _bind
+    private var _bind: FragmentCurrentWeatherBinding? = null
+    private val bind get() = _bind!!
 
     private val fragmentViewModel: FragmentsViewModel by activityViewModels()
 
@@ -49,5 +49,11 @@ class CurrentWeatherFragment : Fragment() {
             bind.tvWind.text = it.wind.speed.toString() + " m/s"
             bind.tvTemp.text = String.format("%.1f", it.main.temp) + "\u00B0C"
         }
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _bind = null
     }
 }
