@@ -105,6 +105,7 @@ class MainActivityViewModel(
         }
     }
 
+
     private fun getCurrentWeather() {
         coroutineScope.launch {
             val response =
