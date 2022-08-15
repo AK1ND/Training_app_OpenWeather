@@ -14,6 +14,8 @@ class ForecastFragment : Fragment() {
     private lateinit var _bind: FragmentForecastBinding
     private val bind get() = _bind
 
+    private var adapter = ForecastAdapter(this)
+
     private val fragmentViewModel: FragmentsViewModel by activityViewModels()
 
 
@@ -23,6 +25,17 @@ class ForecastFragment : Fragment() {
     ): View {
         _bind = FragmentForecastBinding.inflate(inflater, container, false)
         return bind.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        bind.recyclerView.adapter = adapter
+
+        fragmentViewModel.forecastWeatherData.observe(viewLifecycleOwner){
+            adapter.setForecast(it.list)
+        }
+
     }
 
 }

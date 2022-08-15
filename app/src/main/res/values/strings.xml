@@ -99,5 +99,6 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="weather_forecast">weather Forecast</string>
+    <string name="date">DATE</string>
 
 </resources>

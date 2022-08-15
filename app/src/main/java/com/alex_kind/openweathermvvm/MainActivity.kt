@@ -30,13 +30,6 @@ class MainActivity : AppCompatActivity() {
         bind = ActivityMainBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
-        bind.viewPager2.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-
-        TabLayoutMediator(bind.tabs, bind.viewPager2) { tab, position ->
-            tab.text = tabTitle[position]
-        }.attach()
-
-
         val retrofitService = RetrofitService.getRetrofit()
         val mainRepository = MainRepository(retrofitService)
 
@@ -46,7 +39,17 @@ class MainActivity : AppCompatActivity() {
         )[MainActivityViewModel::class.java]
 
 
-        setParams()
+
+
+
+        bind.viewPager2.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+
+        TabLayoutMediator(bind.tabs, bind.viewPager2) { tab, position ->
+            tab.text = tabTitle[position]
+        }.attach()
+
+
+
 
     }
 
