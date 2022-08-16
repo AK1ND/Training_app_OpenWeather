@@ -133,11 +133,10 @@
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintStart_toEndOf="@+id/wind_toolbar"
-        app:layout_constraintTop_toTopOf="@+id/wind_toolbar"
         app:layout_constraintBottom_toBottomOf="@+id/wind_toolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintStart_toEndOf="@+id/wind_toolbar"
+        app:layout_constraintTop_toTopOf="@+id/wind_toolbar">
 
         <View
             android:id="@+id/string_separate_humidity_and_imageView"

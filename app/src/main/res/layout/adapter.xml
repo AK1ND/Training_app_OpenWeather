@@ -9,8 +9,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_current_weather_tv"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        android:background="@color/color_current_weather_tv">
 
         <ImageView
             android:id="@+id/icon_weather"

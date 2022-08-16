@@ -32,7 +32,7 @@ class ForecastFragment : Fragment() {
 
         bind.recyclerView.adapter = adapter
 
-        fragmentViewModel.forecastWeatherData.observe(viewLifecycleOwner){
+        fragmentViewModel.forecastWeatherData.observe(viewLifecycleOwner) {
             adapter.setForecast(it.list)
         }
 

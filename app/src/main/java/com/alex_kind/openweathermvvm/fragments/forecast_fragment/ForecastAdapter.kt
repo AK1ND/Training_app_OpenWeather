@@ -10,12 +10,15 @@ import com.bumptech.glide.Glide
 import java.text.DateFormatSymbols
 import java.util.*
 
-class ForecastAdapter(private val context: ForecastFragment): RecyclerView.Adapter<ForecastAdapter.MainViewHolder>() {
+class ForecastAdapter(private val context: ForecastFragment) :
+    RecyclerView.Adapter<ForecastAdapter.MainViewHolder>() {
 
     private var forecastList = mutableListOf<Model>()
 
-    fun setForecast(forecast: List<Model>){
+    @SuppressLint("NotifyDataSetChanged")
+    fun setForecast(forecast: List<Model>) {
         this.forecastList = forecast.toMutableList()
+        notifyDataSetChanged()
     }
 
 
@@ -29,7 +32,7 @@ class ForecastAdapter(private val context: ForecastFragment): RecyclerView.Adapt
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val body = forecastList[position]
 
-        holder.bind.tvRecyclerTemp.text =String.format("%.1f", body.main.temp)  + "\u00B0C"
+        holder.bind.tvRecyclerTemp.text = String.format("%.1f", body.main.temp) + "\u00B0C"
         holder.bind.tvRecyclerDescription.text = body.weather[0].description
         Glide.with(context)
             .load("https://openweathermap.org/img/wn/${body.weather[0].icon}@2x.png")
@@ -52,5 +55,5 @@ class ForecastAdapter(private val context: ForecastFragment): RecyclerView.Adapt
     override fun getItemCount(): Int = forecastList.size
 
 
-    class MainViewHolder(val bind: AdapterBinding): RecyclerView.ViewHolder(bind.root) {}
+    class MainViewHolder(val bind: AdapterBinding) : RecyclerView.ViewHolder(bind.root) {}
 }

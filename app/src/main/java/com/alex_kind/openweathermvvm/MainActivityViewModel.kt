@@ -55,19 +55,14 @@ class MainActivityViewModel(
 
     //START OTHER VARIABLES
     private val _latFromGPS = MutableLiveData<String>()
-    val latFromGPS: LiveData<String> get() = _latFromGPS
 
     private val _lonFromGPS = MutableLiveData<String>()
-    val lonFromGPS: LiveData<String> get() = _lonFromGPS
 
     private val _cityData = MutableLiveData<List<MainModelGeo>>()
-    val cityData: LiveData<List<MainModelGeo>> get() = _cityData
 
     private val _latFromResponse = MutableLiveData<String>()
-    val latFromResponse: LiveData<String> get() = _latFromResponse
 
     private val _lonFromResponse = MutableLiveData<String>()
-    val lonFromResponse: LiveData<String> get() = _lonFromResponse
 
     private val _forecastData = MutableLiveData<MainModelForecast>()
     val forecastData: LiveData<MainModelForecast> get() = _forecastData

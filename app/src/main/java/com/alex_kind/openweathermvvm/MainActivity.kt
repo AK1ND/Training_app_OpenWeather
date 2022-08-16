@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(bind.root)
 
 
-
         val retrofitService = RetrofitService.getRetrofit()
         val mainRepository = MainRepository(retrofitService)
 
@@ -48,7 +47,16 @@ class MainActivity : AppCompatActivity() {
         TabLayoutMediator(bind.tabs, bind.viewPager2) { tab, position ->
             tab.text = tabTitle[position]
         }.attach()
+
+
+        bind.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.getLocationUpdates()
+            setParams()
+            bind.swipeRefreshLayout.isRefreshing = false
+        }
+
     }
+
 
 
     private fun setParams() {
@@ -73,6 +81,10 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+
+
+
 
 
     override fun onResume() {
