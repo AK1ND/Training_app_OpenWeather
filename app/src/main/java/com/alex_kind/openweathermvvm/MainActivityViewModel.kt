@@ -81,21 +81,28 @@ class MainActivityViewModel(
 
     private fun getCityName() {
         coroutineScope.launch {
-            loading.postValue(true)
-            val response = mainRepository.getCityName(_latFromGPS.value, _lonFromGPS.value)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    _cityData.postValue(response.body())
-                    val body = response.body()!!
-                    _latFromResponse.value = body[0].lat.toString()
-                    _lonFromResponse.value = body[0].lon.toString()
-                    loading.value = false
-                    getCurrentWeather()
-                    getForecast()
-                } else {
-                    loading.value = false
+            try {
+                loading.value = true
+                val response = mainRepository.getCityName(_latFromGPS.value, _lonFromGPS.value)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        _cityData.postValue(response.body())
+                        val body = response.body()!!
+                        _latFromResponse.value = body[0].lat.toString()
+                        _lonFromResponse.value = body[0].lon.toString()
+                        loading.value = false
+                        getCurrentWeather()
+                        getForecast()
+                    } else {
+                        loading.value = false
+                    }
+
                 }
 
+            } catch (e: Exception){
+                Log.d(TAG, "getCityName: ERROR")
+                loading.value = false
+                Toast.makeText(context, "Bad connection", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -103,24 +110,36 @@ class MainActivityViewModel(
 
     private fun getCurrentWeather() {
         coroutineScope.launch {
-            val response =
-                mainRepository.getCurrentWeather(_latFromResponse.value, _lonFromResponse.value)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    _currentWeatherData.postValue(response.body())
+            try {
+                val response =
+                    mainRepository.getCurrentWeather(_latFromResponse.value, _lonFromResponse.value)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        _currentWeatherData.postValue(response.body())
+                    }
                 }
+
+            } catch (e:Exception){
+                Log.d(TAG, "getCurrentWeather: ERROR")
+
             }
         }
     }
 
     private fun getForecast() {
         coroutineScope.launch {
-            val response =
-                mainRepository.getForecast(_latFromResponse.value, _lonFromResponse.value)
-            withContext(Dispatchers.Main) {
-                if (response.isSuccessful) {
-                    _forecastData.postValue(response.body())
+
+            try {
+                val response =
+                    mainRepository.getForecast(_latFromResponse.value, _lonFromResponse.value)
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        _forecastData.postValue(response.body())
+                    }
                 }
+
+            } catch (e: Exception){
+                Log.d(TAG, "getForecast: ERROR")
             }
         }
     }
@@ -177,8 +196,6 @@ class MainActivityViewModel(
                         Toast.makeText(context, "Null received", Toast.LENGTH_SHORT).show()
                         getLocationUpdates()
                     } else {
-                        Toast.makeText(context, "get success", Toast.LENGTH_SHORT).show()
-
                         _latFromGPS.value = location.latitude.toString()
                         _lonFromGPS.value = location.longitude.toString()
                         getCityName()
