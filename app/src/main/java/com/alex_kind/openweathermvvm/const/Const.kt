@@ -17,6 +17,7 @@ const val BASE_URL = "https://api.openweathermap.org/"
 const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
 
 const val TAG = "HAHAHAHA"
+const val ROOM_DB_DATA = "ROOM_DB_DATA"
 
 const val APP_ID = "6e298e72d16587b721abb30bbf7c721a"
 

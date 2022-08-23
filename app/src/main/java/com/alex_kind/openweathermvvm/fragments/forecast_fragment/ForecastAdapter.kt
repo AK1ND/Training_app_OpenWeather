@@ -1,24 +1,39 @@
 package com.alex_kind.openweathermvvm.fragments.forecast_fragment
 
 import android.annotation.SuppressLint
+import android.net.wifi.rtt.CivicLocationKeys.ROOM
+import android.util.Log
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.alex_kind.openweathermvvm.const.ROOM_DB_DATA
 import com.alex_kind.openweathermvvm.databinding.AdapterBinding
+import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
+import com.alex_kind.openweathermvvm.models.forecast.MainModelForecast
 import com.alex_kind.openweathermvvm.models.forecast.Model
+import com.alex_kind.openweathermvvm.view_models.DatabaseViewModel
 import com.bumptech.glide.Glide
 import java.text.DateFormatSymbols
 import java.util.*
+import kotlin.math.log
 
-class ForecastAdapter(private val context: ForecastFragment) :
+
+@SuppressLint("NotifyDataSetChanged")
+class ForecastAdapter(private val dbViewModel: DatabaseViewModel) :
     RecyclerView.Adapter<ForecastAdapter.MainViewHolder>() {
 
     private var forecastList = mutableListOf<Model>()
 
-    @SuppressLint("NotifyDataSetChanged")
+    private var dbForecastData = emptyList<WeatherData>()
+
     fun setForecast(forecast: List<Model>) {
         this.forecastList = forecast.toMutableList()
         notifyDataSetChanged()
+    }
+
+    fun setDatabase(db: List<WeatherData>){
+        this.dbForecastData = db
     }
 
 
@@ -34,9 +49,10 @@ class ForecastAdapter(private val context: ForecastFragment) :
 
         holder.bind.tvRecyclerTemp.text = String.format("%.1f", body.main.temp) + "\u00B0C"
         holder.bind.tvRecyclerDescription.text = body.weather[0].description
-        Glide.with(context)
+        Glide.with(holder.itemView.context)
             .load("https://openweathermap.org/img/wn/${body.weather[0].icon}@2x.png")
             .into(holder.bind.iconWeather)
+
 
         //DATE
         val year: Int = body.dt_txt.substring(0, 4).toInt()
@@ -49,6 +65,14 @@ class ForecastAdapter(private val context: ForecastFragment) :
 
         holder.bind.tvRecyclerDate.text = weekday + " " + body.dt_txt.substring(10)
 
+        val weather = WeatherData(position+1, "cityName", "cityName", body.weather[0].description,
+        body.main.humidity, body.wind.speed, body.main.temp)
+
+        if (dbForecastData.size < 41){
+            dbViewModel.addWeatherData(weather)
+        } else {
+            dbViewModel.updateWeatherData(weather)
+        }
     }
 
 

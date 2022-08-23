@@ -1,6 +1,8 @@
 package com.alex_kind.openweathermvvm
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
@@ -10,14 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.databinding.ActivityMainBinding
-import com.alex_kind.openweathermvvm.fragments.FragmentsViewModel
+import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
+import com.alex_kind.openweathermvvm.view_models.FragmentsViewModel
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.alex_kind.openweathermvvm.retrofit.RetrofitService
+import com.alex_kind.openweathermvvm.view_models.DatabaseViewModel
+import com.alex_kind.openweathermvvm.view_models.MainActivityViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var bind: ActivityMainBinding
+
 
     private lateinit var viewModel: MainActivityViewModel
     private val fragmentsViewModel: FragmentsViewModel by viewModels()
@@ -58,7 +64,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun setParams() {
         viewModel.currentWeatherData.observe(this) {
             fragmentsViewModel.setDataCurrentWeather(it)
@@ -68,6 +73,7 @@ class MainActivity : AppCompatActivity() {
             fragmentsViewModel.setDataForecast(it)
             loading()
         }
+
     }
 
 
@@ -81,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
-
 
 
 

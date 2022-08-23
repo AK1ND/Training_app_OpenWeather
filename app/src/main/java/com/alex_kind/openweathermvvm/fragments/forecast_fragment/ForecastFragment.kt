@@ -6,17 +6,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.alex_kind.openweathermvvm.databinding.FragmentForecastBinding
-import com.alex_kind.openweathermvvm.fragments.FragmentsViewModel
+import com.alex_kind.openweathermvvm.view_models.DatabaseViewModel
+import com.alex_kind.openweathermvvm.view_models.FragmentsViewModel
 
 class ForecastFragment : Fragment() {
 
     private var _bind: FragmentForecastBinding? = null
     private val bind get() = _bind!!
 
-    private var adapter = ForecastAdapter(this)
 
     private val fragmentViewModel: FragmentsViewModel by activityViewModels()
+
+    private lateinit var dbViewModel: DatabaseViewModel
+
+    private lateinit var adapter: ForecastAdapter
 
 
     override fun onCreateView(
@@ -29,14 +34,20 @@ class ForecastFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dbViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
+        adapter = ForecastAdapter(dbViewModel)
 
         bind.recyclerView.adapter = adapter
 
         fragmentViewModel.forecastWeatherData.observe(viewLifecycleOwner) {
             adapter.setForecast(it.list)
         }
+        dbViewModel.readAllWeatherData.observe(viewLifecycleOwner) {
+            adapter.setDatabase(it)
+        }
 
     }
+
 
 
     override fun onDestroyView() {

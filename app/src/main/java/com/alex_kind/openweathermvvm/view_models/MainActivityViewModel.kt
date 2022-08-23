@@ -1,4 +1,4 @@
-package com.alex_kind.openweathermvvm
+package com.alex_kind.openweathermvvm.view_models
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.alex_kind.openweathermvvm.const.PERMISSION_REQUEST_ACCESS_LOCATION
 import com.alex_kind.openweathermvvm.const.TAG
 import com.alex_kind.openweathermvvm.models.current_weather.MainModelCurrentWeather
@@ -25,7 +26,9 @@ import com.alex_kind.openweathermvvm.models.forecast.MainModelForecast
 import com.alex_kind.openweathermvvm.models.geo.MainModelGeo
 import com.alex_kind.openweathermvvm.retrofit.MainRepository
 import com.google.android.gms.location.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @SuppressLint("StaticFieldLeak")
 class MainActivityViewModel(
@@ -48,10 +51,6 @@ class MainActivityViewModel(
     }
     //END LOCATION'S VARIABLES
 
-    //Create coroutines
-    private val coroutineContext = SupervisorJob() + Dispatchers.Main.immediate
-    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineContext)
-
 
     //START OTHER VARIABLES
     private val _latFromGPS = MutableLiveData<String>()
@@ -65,10 +64,10 @@ class MainActivityViewModel(
     private val _lonFromResponse = MutableLiveData<String>()
 
     private val _forecastData = MutableLiveData<MainModelForecast>()
-    val forecastData: LiveData<MainModelForecast> get() = _forecastData
+    val forecastData: LiveData<MainModelForecast> = _forecastData
 
     private val _currentWeatherData = MutableLiveData<MainModelCurrentWeather>()
-    val currentWeatherData: LiveData<MainModelCurrentWeather> get() = _currentWeatherData
+    val currentWeatherData: LiveData<MainModelCurrentWeather> = _currentWeatherData
 
     val loading = MutableLiveData<Boolean>()
     //END OTHER VARIABLES
@@ -80,7 +79,7 @@ class MainActivityViewModel(
 
 
     private fun getCityName() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 loading.value = true
                 val response = mainRepository.getCityName(_latFromGPS.value, _lonFromGPS.value)
@@ -99,7 +98,7 @@ class MainActivityViewModel(
 
                 }
 
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d(TAG, "getCityName: ERROR")
                 loading.value = false
                 Toast.makeText(context, "Bad connection", Toast.LENGTH_SHORT).show()
@@ -109,7 +108,7 @@ class MainActivityViewModel(
 
 
     private fun getCurrentWeather() {
-        coroutineScope.launch {
+        viewModelScope.launch {
             try {
                 val response =
                     mainRepository.getCurrentWeather(_latFromResponse.value, _lonFromResponse.value)
@@ -119,7 +118,7 @@ class MainActivityViewModel(
                     }
                 }
 
-            } catch (e:Exception){
+            } catch (e: Exception) {
                 Log.d(TAG, "getCurrentWeather: ERROR")
 
             }
@@ -127,7 +126,7 @@ class MainActivityViewModel(
     }
 
     private fun getForecast() {
-        coroutineScope.launch {
+        viewModelScope.launch {
 
             try {
                 val response =
@@ -138,7 +137,7 @@ class MainActivityViewModel(
                     }
                 }
 
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d(TAG, "getForecast: ERROR")
             }
         }
