@@ -69,6 +69,8 @@ class MainActivityViewModel(
     private val _currentWeatherData = MutableLiveData<MainModelCurrentWeather>()
     val currentWeatherData: LiveData<MainModelCurrentWeather> = _currentWeatherData
 
+    val errorBool = MutableLiveData<Boolean>()
+
     val loading = MutableLiveData<Boolean>()
     //END OTHER VARIABLES
 
@@ -82,6 +84,7 @@ class MainActivityViewModel(
         viewModelScope.launch {
             try {
                 loading.value = true
+                errorBool.value = false
                 val response = mainRepository.getCityName(_latFromGPS.value, _lonFromGPS.value)
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
@@ -101,6 +104,7 @@ class MainActivityViewModel(
             } catch (e: Exception) {
                 Log.d(TAG, "getCityName: ERROR")
                 loading.value = false
+                errorBool.value = true
                 Toast.makeText(context, "Bad connection", Toast.LENGTH_SHORT).show()
             }
         }

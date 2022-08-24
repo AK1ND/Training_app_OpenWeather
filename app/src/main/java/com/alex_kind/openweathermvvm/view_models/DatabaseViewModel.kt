@@ -12,8 +12,7 @@ import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class DatabaseViewModel(application: Application): AndroidViewModel(application) {
-
+class DatabaseViewModel(application: Application) : AndroidViewModel(application) {
 
 
     val readAllWeatherData: LiveData<List<WeatherData>>
@@ -25,15 +24,15 @@ class DatabaseViewModel(application: Application): AndroidViewModel(application)
         readAllWeatherData = repository.readAllData
     }
 
-    fun addWeatherData(weatherData: WeatherData){
+    fun addWeatherData(weatherData: WeatherData) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addWeatherData(weatherData)
             Log.d(ROOM_DB_DATA, "ROOM ADD")
         }
     }
 
-    fun updateWeatherData(weatherData: WeatherData){
-        viewModelScope.launch(Dispatchers.IO){
+    fun updateWeatherData(weatherData: WeatherData) {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.updateWeatherData(weatherData)
             Log.d(ROOM_DB_DATA, "ROOM UPDATE")
         }

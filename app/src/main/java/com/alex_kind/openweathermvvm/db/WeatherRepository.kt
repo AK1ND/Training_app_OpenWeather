@@ -8,11 +8,11 @@ class WeatherRepository(private val weatherDao: WeatherDao) {
 
     val readAllData: LiveData<List<WeatherData>> = weatherDao.readAllWeatherData()
 
-    suspend fun addWeatherData(weatherData: WeatherData){
+    suspend fun addWeatherData(weatherData: WeatherData) {
         weatherDao.addWeatherData(weatherData)
     }
 
-    suspend fun updateWeatherData(weatherData: WeatherData){
+    suspend fun updateWeatherData(weatherData: WeatherData) {
         weatherDao.updateWeatherData(weatherData)
     }
 

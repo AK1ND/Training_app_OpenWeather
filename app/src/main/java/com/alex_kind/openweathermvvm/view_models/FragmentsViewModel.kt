@@ -17,12 +17,18 @@ class FragmentsViewModel : ViewModel() {
     val forecastWeatherData: LiveData<MainModelForecast> = _forecastWeatherData
     //end
 
+    val errorLoading = MutableLiveData<Boolean>()
+
     fun setDataCurrentWeather(data: MainModelCurrentWeather) {
         _currentWeatherData.value = data
     }
 
     fun setDataForecast(data: MainModelForecast) {
         _forecastWeatherData.value = data
+    }
+
+    fun setErrorBool(bool: Boolean){
+        errorLoading.value = bool
     }
 
 

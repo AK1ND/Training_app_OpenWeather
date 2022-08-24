@@ -8,14 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import coil.load
 import com.alex_kind.openweathermvvm.databinding.FragmentCurrentWeatherBinding
+import com.alex_kind.openweathermvvm.db.GetBitmap
 import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
 import com.alex_kind.openweathermvvm.view_models.DatabaseViewModel
 import com.alex_kind.openweathermvvm.view_models.FragmentsViewModel
 import com.bumptech.glide.Glide
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class CurrentWeatherFragment : Fragment() {
@@ -23,8 +25,6 @@ class CurrentWeatherFragment : Fragment() {
     private var _bind: FragmentCurrentWeatherBinding? = null
     private val bind get() = _bind!!
 
-    private val coroutineContext = SupervisorJob() + Dispatchers.Main.immediate
-    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineContext)
 
     private lateinit var dbViewModel: DatabaseViewModel
 
@@ -43,10 +43,30 @@ class CurrentWeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         dbViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
-
         setParams()
+        load()
     }
 
+    private fun load(){
+        fragmentViewModel.errorLoading.observe(viewLifecycleOwner){
+            if (it){
+                setParamsFromDatabase()
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setParamsFromDatabase(){
+        dbViewModel.readAllWeatherData.observe(viewLifecycleOwner){
+            val body = it[0]
+            bind.tvCityName.text = body.cityName
+            bind.iconWeatherCurrent.load(body.icon)
+            bind.tvTemp.text = body.temp.toString() + "\u00B0C"
+            bind.tvDescription.text = body.description
+            bind.tvWind.text = body.wind.toString()  + " m/s"
+            bind.tvHumidity.text = body.humidity.toString() + "%"
+        }
+    }
 
     @SuppressLint("SetTextI18n")
     private fun setParams() {
@@ -63,17 +83,22 @@ class CurrentWeatherFragment : Fragment() {
             bind.tvWind.text = it.wind.speed.toString() + " m/s"
             bind.tvTemp.text = String.format("%.1f", it.main.temp) + "\u00B0C"
 
-            val weatherDB = WeatherData(
-                0, "date",  it.name, it.weather[0].description,
-                it.main.humidity, it.wind.speed, it.main.temp
-            )
+            lifecycleScope.launch {
+                delay(2000)
+                val bitmap = GetBitmap(requireContext()).bitmap(iconID)
 
-            dbViewModel.addWeatherData(weatherDB)
-            dbViewModel.updateWeatherData(weatherDB)
+                val weatherDB = WeatherData(
+                    0, bitmap , "date", it.name, it.weather[0].description,
+                    it.main.humidity, it.wind.speed, it.main.temp
+                )
+
+                dbViewModel.addWeatherData(weatherDB)
+                dbViewModel.updateWeatherData(weatherDB)
+            }
+
         }
-
-
     }
+
 
 
     override fun onDestroyView() {

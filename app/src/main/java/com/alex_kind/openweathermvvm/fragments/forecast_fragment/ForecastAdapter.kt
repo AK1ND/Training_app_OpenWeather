@@ -1,47 +1,45 @@
 package com.alex_kind.openweathermvvm.fragments.forecast_fragment
 
 import android.annotation.SuppressLint
-import android.net.wifi.rtt.CivicLocationKeys.ROOM
-import android.util.Log
-import android.view.Display
+import android.content.Context
+import android.provider.MediaStore.Images.Media.getBitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.alex_kind.openweathermvvm.const.ROOM_DB_DATA
 import com.alex_kind.openweathermvvm.databinding.AdapterBinding
+import com.alex_kind.openweathermvvm.db.GetBitmap
 import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
-import com.alex_kind.openweathermvvm.models.forecast.MainModelForecast
 import com.alex_kind.openweathermvvm.models.forecast.Model
 import com.alex_kind.openweathermvvm.view_models.DatabaseViewModel
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import java.text.DateFormatSymbols
 import java.util.*
-import kotlin.math.log
 
 
 @SuppressLint("NotifyDataSetChanged")
-class ForecastAdapter(private val dbViewModel: DatabaseViewModel) :
+class ForecastAdapter(private val dbViewModel: DatabaseViewModel, private val context: Context) :
     RecyclerView.Adapter<ForecastAdapter.MainViewHolder>() {
+
+    private val coroutineContext = SupervisorJob() + Dispatchers.Main.immediate
+    private val coroutineScope: CoroutineScope = CoroutineScope(coroutineContext)
 
     private var forecastList = mutableListOf<Model>()
 
-    private var dbForecastData = emptyList<WeatherData>()
+    private var dbForecastData = mutableListOf<WeatherData>()
 
     fun setForecast(forecast: List<Model>) {
         this.forecastList = forecast.toMutableList()
         notifyDataSetChanged()
     }
 
-    fun setDatabase(db: List<WeatherData>){
-        this.dbForecastData = db
+    fun setDatabaseForInput(db: List<WeatherData>) {
+        dbForecastData = db.toMutableList()
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
-        val binding = AdapterBinding.inflate(inflater, parent, false)
-        return MainViewHolder(binding)
-    }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
@@ -65,14 +63,32 @@ class ForecastAdapter(private val dbViewModel: DatabaseViewModel) :
 
         holder.bind.tvRecyclerDate.text = weekday + " " + body.dt_txt.substring(10)
 
-        val weather = WeatherData(position+1, "cityName", "cityName", body.weather[0].description,
-        body.main.humidity, body.wind.speed, body.main.temp)
 
-        if (dbForecastData.size < 41){
-            dbViewModel.addWeatherData(weather)
-        } else {
-            dbViewModel.updateWeatherData(weather)
+        coroutineScope.launch {
+            val bitmap = GetBitmap(context).bitmap(body.weather[0].icon)
+
+            val weather = WeatherData(
+                position + 1, bitmap, "$weekday ${body.dt_txt.substring(10)}",
+                "cityName", body.weather[0].description,
+                body.main.humidity, body.wind.speed, body.main.temp
+            )
+
+            if (dbForecastData.size < 41) {
+                dbViewModel.addWeatherData(weather)
+            } else {
+                dbViewModel.updateWeatherData(weather)
+            }
         }
+
+
+    }
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = AdapterBinding.inflate(inflater, parent, false)
+        return MainViewHolder(binding)
     }
 
 
