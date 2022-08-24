@@ -18,13 +18,13 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var bind: ActivityMainBinding
+    private lateinit var bind: ActivityMainBinding
 
 
     private lateinit var viewModel: MainActivityViewModel
     private val fragmentsViewModel: FragmentsViewModel by viewModels()
 
-    var tabTitle = arrayOf("Current weather", "Weather forecast")
+    private var tabTitle = arrayOf("Current weather", "Weather forecast")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

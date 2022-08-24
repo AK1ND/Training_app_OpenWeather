@@ -3,9 +3,11 @@ package com.alex_kind.openweathermvvm.fragments.forecast_fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.provider.MediaStore.Images.Media.getBitmap
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.alex_kind.openweathermvvm.const.ROOM_DB_DATA
 import com.alex_kind.openweathermvvm.databinding.AdapterBinding
 import com.alex_kind.openweathermvvm.db.GetBitmap
 import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
@@ -65,18 +67,23 @@ class ForecastAdapter(private val dbViewModel: DatabaseViewModel, private val co
 
 
         coroutineScope.launch {
-            val bitmap = GetBitmap(context).bitmap(body.weather[0].icon)
+            try {
 
-            val weather = WeatherData(
-                position + 1, bitmap, "$weekday ${body.dt_txt.substring(10)}",
-                "cityName", body.weather[0].description,
-                body.main.humidity, body.wind.speed, body.main.temp
-            )
+                val bitmap = GetBitmap(context).bitmap(body.weather[0].icon)
 
-            if (dbForecastData.size < 41) {
-                dbViewModel.addWeatherData(weather)
-            } else {
-                dbViewModel.updateWeatherData(weather)
+                val weather = WeatherData(
+                    position + 1, bitmap, "$weekday ${body.dt_txt.substring(10)}",
+                    "cityName", body.weather[0].description,
+                    body.main.humidity, body.wind.speed, body.main.temp
+                )
+
+                if (dbForecastData.size < 41) {
+                    dbViewModel.addWeatherData(weather)
+                } else {
+                    dbViewModel.updateWeatherData(weather)
+                }
+            } catch (e: Exception){
+                Log.d(ROOM_DB_DATA, "ERROR")
             }
         }
 
