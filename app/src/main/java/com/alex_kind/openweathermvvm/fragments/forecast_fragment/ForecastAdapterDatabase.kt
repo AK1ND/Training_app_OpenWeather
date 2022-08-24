@@ -15,7 +15,7 @@ class ForecastAdapterDatabase() : RecyclerView.Adapter<ForecastAdapterDatabase.M
     private var dbForecast = mutableListOf<WeatherData>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setDatabaseForOutput(db: List<WeatherData>){
+    fun setDatabaseForOutput(db: List<WeatherData>) {
         this.dbForecast = db.toMutableList()
         notifyDataSetChanged()
     }
@@ -23,20 +23,17 @@ class ForecastAdapterDatabase() : RecyclerView.Adapter<ForecastAdapterDatabase.M
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         try {
-            val pos = position +1
+            val pos = position + 1
             holder.bind.tvRecyclerDate.text = dbForecast[pos].date
             holder.bind.tvRecyclerTemp.text = dbForecast[pos].temp.toString()
             holder.bind.tvRecyclerDescription.text = dbForecast[pos].description
             holder.bind.iconWeather.load(dbForecast[pos].icon)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Log.d(ROOM_DB_DATA, "stop")
         }
 
 
     }
-
-
-
 
 
     override fun onCreateViewHolder(
@@ -51,6 +48,6 @@ class ForecastAdapterDatabase() : RecyclerView.Adapter<ForecastAdapterDatabase.M
     override fun getItemCount(): Int = dbForecast.size
 
 
-    class MainViewHolder(val bind: AdapterBinding): RecyclerView.ViewHolder(bind.root)
+    class MainViewHolder(val bind: AdapterBinding) : RecyclerView.ViewHolder(bind.root)
 
 }

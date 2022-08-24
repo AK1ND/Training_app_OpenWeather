@@ -9,7 +9,7 @@ import coil.request.SuccessResult
 
 class GetBitmap(private val context: Context) {
 
-    suspend fun bitmap(iconId: String): Bitmap{
+    suspend fun bitmap(iconId: String): Bitmap {
         val loading = ImageLoader(context)
         val request = ImageRequest.Builder(context)
             .data("https://openweathermap.org/img/wn/$iconId@2x.png")

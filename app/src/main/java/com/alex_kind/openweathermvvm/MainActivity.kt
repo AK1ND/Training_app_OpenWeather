@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             loading()
         }
 
-        viewModel.errorBool.observe(this){
+        viewModel.errorBool.observe(this) {
             fragmentsViewModel.setErrorBool(it)
         }
 

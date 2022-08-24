@@ -2,7 +2,6 @@ package com.alex_kind.openweathermvvm.fragments.forecast_fragment
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -82,14 +81,13 @@ class ForecastAdapter(private val dbViewModel: DatabaseViewModel, private val co
                 } else {
                     dbViewModel.updateWeatherData(weather)
                 }
-            } catch (e: Exception){
+            } catch (e: Exception) {
                 Log.d(ROOM_DB_DATA, "ERROR")
             }
         }
 
 
     }
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {

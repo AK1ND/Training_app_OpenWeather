@@ -44,8 +44,8 @@ class ForecastFragment : Fragment() {
         adapter = ForecastAdapter(dbViewModel, requireContext())
         dbAdapter = ForecastAdapterDatabase()
 
-        fragmentViewModel.errorLoading.observe(viewLifecycleOwner){
-            if (it){
+        fragmentViewModel.errorLoading.observe(viewLifecycleOwner) {
+            if (it) {
                 bind.recyclerView.adapter = dbAdapter
             } else {
                 bind.recyclerView.adapter = adapter
@@ -59,7 +59,7 @@ class ForecastFragment : Fragment() {
             adapter.setDatabaseForInput(it)
         }
 
-        dbViewModel.readAllWeatherData.observe(viewLifecycleOwner){
+        dbViewModel.readAllWeatherData.observe(viewLifecycleOwner) {
             dbAdapter.setDatabaseForOutput(it)
         }
 

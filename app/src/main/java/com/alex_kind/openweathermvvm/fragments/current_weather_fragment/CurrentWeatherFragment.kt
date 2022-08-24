@@ -47,23 +47,23 @@ class CurrentWeatherFragment : Fragment() {
         load()
     }
 
-    private fun load(){
-        fragmentViewModel.errorLoading.observe(viewLifecycleOwner){
-            if (it){
+    private fun load() {
+        fragmentViewModel.errorLoading.observe(viewLifecycleOwner) {
+            if (it) {
                 setParamsFromDatabase()
             }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setParamsFromDatabase(){
-        dbViewModel.readAllWeatherData.observe(viewLifecycleOwner){
+    private fun setParamsFromDatabase() {
+        dbViewModel.readAllWeatherData.observe(viewLifecycleOwner) {
             val body = it[0]
             bind.tvCityName.text = body.cityName
             bind.iconWeatherCurrent.load(body.icon)
             bind.tvTemp.text = body.temp.toString() + "\u00B0C"
             bind.tvDescription.text = body.description
-            bind.tvWind.text = body.wind.toString()  + " m/s"
+            bind.tvWind.text = body.wind.toString() + " m/s"
             bind.tvHumidity.text = body.humidity.toString() + "%"
         }
     }
@@ -88,7 +88,7 @@ class CurrentWeatherFragment : Fragment() {
                 val bitmap = GetBitmap(requireContext()).bitmap(iconID)
 
                 val weatherDB = WeatherData(
-                    0, bitmap , "date", it.name, it.weather[0].description,
+                    0, bitmap, "date", it.name, it.weather[0].description,
                     it.main.humidity, it.wind.speed, it.main.temp
                 )
 
@@ -98,7 +98,6 @@ class CurrentWeatherFragment : Fragment() {
 
         }
     }
-
 
 
     override fun onDestroyView() {

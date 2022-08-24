@@ -27,7 +27,7 @@ class FragmentsViewModel : ViewModel() {
         _forecastWeatherData.value = data
     }
 
-    fun setErrorBool(bool: Boolean){
+    fun setErrorBool(bool: Boolean) {
         errorLoading.value = bool
     }
 
