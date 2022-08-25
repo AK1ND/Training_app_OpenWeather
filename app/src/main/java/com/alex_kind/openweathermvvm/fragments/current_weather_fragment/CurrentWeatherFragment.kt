@@ -70,7 +70,7 @@ class CurrentWeatherFragment : Fragment() {
                 bind.tvHumidity.text = body.humidity.toString() + "%"
 
             } catch (e: Exception) {
-                Log.d(ROOM_DB_DATA, "CURRENT WEATHER ERROR")
+                Log.d(ROOM_DB_DATA, "CURRENT WEATHER DB ERROR")
             }
         }
     }
