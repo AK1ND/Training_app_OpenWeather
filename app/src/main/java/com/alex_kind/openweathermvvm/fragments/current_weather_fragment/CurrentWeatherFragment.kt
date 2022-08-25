@@ -2,6 +2,7 @@ package com.alex_kind.openweathermvvm.fragments.current_weather_fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
+import com.alex_kind.openweathermvvm.const.ROOM_DB_DATA
 import com.alex_kind.openweathermvvm.databinding.FragmentCurrentWeatherBinding
 import com.alex_kind.openweathermvvm.db.GetBitmap
 import com.alex_kind.openweathermvvm.models.db_weather.WeatherData
@@ -58,13 +60,18 @@ class CurrentWeatherFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun setParamsFromDatabase() {
         dbViewModel.readAllWeatherData.observe(viewLifecycleOwner) {
-            val body = it[0]
-            bind.tvCityName.text = body.cityName
-            bind.iconWeatherCurrent.load(body.icon)
-            bind.tvTemp.text = body.temp.toString() + "\u00B0C"
-            bind.tvDescription.text = body.description
-            bind.tvWind.text = body.wind.toString() + " m/s"
-            bind.tvHumidity.text = body.humidity.toString() + "%"
+            try {
+                val body = it[0]
+                bind.tvCityName.text = body.cityName
+                bind.iconWeatherCurrent.load(body.icon)
+                bind.tvTemp.text = body.temp.toString() + "\u00B0C"
+                bind.tvDescription.text = body.description
+                bind.tvWind.text = body.wind.toString() + " m/s"
+                bind.tvHumidity.text = body.humidity.toString() + "%"
+
+            } catch (e: Exception) {
+                Log.d(ROOM_DB_DATA, "CURRENT WEATHER ERROR")
+            }
         }
     }
 

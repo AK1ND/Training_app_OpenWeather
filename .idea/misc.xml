@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout-land/fragment_current_weather.xml" value="0.2296875" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/adapter.xml" value="0.19972826086956522" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/blank_fragment.xml" value="0.16388044579533942" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/current_weather_fragment.xml" value="0.1707193515704154" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_current_weather.xml" value="0.2" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_forecast.xml" value="0.17760416666666667" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/fragment_scrolling.xml" value="0.19972826086956522" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/main_fragment.xml" value="0.1707193515704154" />
-        <entry key="..\:/Kotlin Projects/OpenWeatherMVVM/app/src/main/res/layout/navigation_fragment_current_weather_fragment.xml" value="0.19972826086956522" />
-      </map>
-    </option>
-  </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

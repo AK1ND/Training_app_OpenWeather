@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     private var tabTitle = arrayOf("Current weather", "Weather forecast")
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityMainBinding.inflate(layoutInflater)
